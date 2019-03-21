@@ -11,15 +11,33 @@ namespace Control_Logs_NetCore2._1
             Console.WriteLine("Hello World!");
             List<string> data = new List<string>();
 
-            data.Add("modelo");
-            data.Add("marca");
-            data.Add("version");
-            data.Add("tipo techo");
+            string tx_step = Console.ReadLine();
+            Console.WriteLine("Dato ingresado es: "+ tx_step);
 
 
-            createlog(data, "error-data", "21032019_.xml","123456789", "2019", "1903");
+            if (tx_step == "error-data") {
+
+                data.Add("modelo");
+                data.Add("marca");
+                data.Add("version");
+                data.Add("tipo techo");
+
+                createlog(data, tx_step, "987654321_.xml", "12000089", "2019", "2556");
+
+            }
+
+            if (tx_step == "error-xml")
+            {
+
+                data.Add("Mensaje de error en XML");
+                createlog(data, tx_step, "123456.xml", "987654321", "1546", "2556");
+
+            }
 
 
+           
+
+            Console.WriteLine("Para salir presione cualquier tecla.");
             Console.ReadKey();
 
 
@@ -29,8 +47,6 @@ namespace Control_Logs_NetCore2._1
         /*Obtiene los datos del proceso de TBK para procesar la creación de log*/
         protected static void createlog(List<string> contenido, string tx_step, string filename, string idorigen, string sucursal, string idsucursalxkey)
         {
-
-            
 
             string m_exePath = string.Empty;
             m_exePath = Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory) + "\\logsrequest\\"+idsucursalxkey;
@@ -43,25 +59,12 @@ namespace Control_Logs_NetCore2._1
 
             try { 
 
-                if (tx_step == "error-data")
-                {
 
-                    using (StreamWriter w = File.AppendText(m_exePath + "\\" + filename + "_log.txt"))
+                    using (StreamWriter w = File.AppendText(m_exePath + "\\" + filename + "_"+ tx_step +".txt"))
                     {
                         Log(contenido, w, tx_step, idorigen, sucursal);
                     }
 
-                }
-
-                if (tx_step == "error-xml")
-                {
-
-                    using (StreamWriter w = File.AppendText(m_exePath + "\\" + filename + "_log.txt"))
-                    {
-                        Log(contenido, w, tx_step, idorigen, sucursal);
-                    }
-
-                }
             }
             catch (Exception ex)
             {
